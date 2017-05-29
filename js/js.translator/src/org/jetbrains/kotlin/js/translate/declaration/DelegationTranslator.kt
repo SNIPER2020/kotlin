@@ -84,11 +84,13 @@ class DelegationTranslator(
 
     fun generateDelegated() {
         for (specifier in delegationBySpecifiers) {
-            generateDelegates(getSuperClass(specifier), fields[specifier]!!)
+            getSuperClass(specifier)?.let {
+                generateDelegates(it, fields[specifier]!!)
+            }
         }
     }
 
-    private fun getSuperClass(specifier: KtSuperTypeListEntry): ClassDescriptor =
+    private fun getSuperClass(specifier: KtSuperTypeListEntry): ClassDescriptor? =
             CodegenUtil.getSuperClassBySuperTypeListEntry(specifier, bindingContext())
 
     private fun generateDelegates(toClass: ClassDescriptor, field: Field) {
